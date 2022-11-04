@@ -1,6 +1,7 @@
 package com.example.diaryproject;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.radiobutton.MaterialRadioButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,10 +36,15 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
     private String mSelectedUserDate_end = "";          // 선택된 일시 값
     private int mSelectiveWeatherType = -1;             // 선택된 날씨 값(1 ~ 4)
 
+    private DataBaseHelper mDatabaseHelper; // Database 유틸객체
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diary_detail);
+
+        //DataBase 객체 생성
+        mDatabaseHelper = new DataBaseHelper(this);
 
         mTvDate_start = findViewById(R.id.tv_date);             // 일시 설정 텍스트
         mTvDate_end = findViewById(R.id.tv_date2);
@@ -58,6 +66,24 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
 
         mSelectedUserDate_end = new SimpleDateFormat("yyyy/MM/dd (EE)", Locale.KOREA).format(new Date());
         mTvDate_end.setText(mSelectedUserDate_end);
+
+        // 이전 엑티비티로부터 값을 전달 받기
+        Intent intent = getIntent();
+        if (intent.getExtras() != null){
+            // intent putExtra 했던 데이터가 존재한다면 내부를 수행
+            DiaryModel diaryModel = (DiaryModel) intent.getSerializableExtra("diaryModel");
+            mDetailMode = intent.getStringExtra("mode");
+            mBeforeDate = diaryModel.getWriteDate(); // 게시글 database update 처리를 위해서 여기서 받아둔다.
+
+            // 넘겨받은 값을 활용해서 필드들을 설정해주기
+            mEtTitle.setText(diaryModel.getTitle());
+            mEtContent.setText(diaryModel.getContent());
+            int weatherType = diaryModel.getWeatherType();
+            ((MaterialRadioButton) mRgWeather.getChildAt(weatherType)).setChecked(true);
+            mTvDate_start.setText(diaryModel.getUserDate());
+            mTvDate_end.setText(diaryModel.getUserDate());
+
+        }
 
     }
 
@@ -97,10 +123,12 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
                 String content = mEtTitle.getText().toString();     // 내용 입력 값
                 String userDate = mSelectedUserDate_start;          // 사용자가 선택한 일시
                 String userDate2 = mSelectedUserDate_end;           // 사용자가 선택한 일시
+                String writeDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.KOREAN).format(new Date()); //작성 완료 누른 시점의 일시
 
-                String writeDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.KOREAN).format(new Date());
 
                 // 데이터베이스에 저장
+                mDatabaseHelper.setInsertDiaryList(title, content, mSelectiveWeatherType, userDate, userDate2 , writeDate);
+                Toast.makeText(this, "다이어리 등록이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
 
                 finish();       // 현재 액티비티 종료
 

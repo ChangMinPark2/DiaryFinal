@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.ViewHolder> {
     ArrayList<DiaryModel> mLstDiary;        // 다이어리 데이터들을 들고 있는 자료형 배열
     Context mContext;
+    DataBaseHelper mDatabaseHelper; // 데이터베이스 헬퍼 클라스
 
 
     @NonNull
@@ -26,6 +27,7 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
         // 아이템 뷰가 최초로 생성이 될 때 호출되는 곳
 
         mContext = parent.getContext();
+        mDatabaseHelper = new DataBaseHelper(mContext);
         View holder = LayoutInflater.from(mContext).inflate(R.layout.list_item_diary, parent, false);
         return new ViewHolder(holder);
     }
@@ -138,6 +140,9 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
                                         mContext.startActivity(diaryDetailIntent);
                                     } else {
                                         // 삭제하기 버튼을 눌렀을 때
+                                        // delete database
+                                        mDatabaseHelper.setDeleteDiaryList(diaryModel.getWriteDate());
+                                        // dalete vi
                                         mLstDiary.remove(currentPosition);
                                         notifyItemRemoved(currentPosition);
                                     }
