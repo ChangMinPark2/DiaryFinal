@@ -80,8 +80,32 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
             mEtContent.setText(diaryModel.getContent());
             int weatherType = diaryModel.getWeatherType();
             ((MaterialRadioButton) mRgWeather.getChildAt(weatherType)).setChecked(true);
+            mSelectedUserDate_start = diaryModel.getUserDate();
+            mSelectedUserDate_end = diaryModel.getUserDate();
             mTvDate_start.setText(diaryModel.getUserDate());
             mTvDate_end.setText(diaryModel.getUserDate());
+
+            if (mDetailMode.equals("modify")){
+                //수정모드
+                TextView tv_header_title = findViewById(R.id.tv_header_title);
+                tv_header_title.setText("일기 수정");
+            }else if (mDetailMode.equals("detail")) {
+                //상세 보기 모드
+                TextView tv_header_title = findViewById(R.id.tv_header_title);
+                tv_header_title.setText("일기 상세보기");
+
+                //읽기 전용 화면으로 표시
+                mEtTitle.setEnabled(false);
+                mEtContent.setEnabled(false);
+                mTvDate_start.setEnabled(false);
+                mTvDate_end.setEnabled(false);
+                for (int i=0; i < mRgWeather.getChildCount(); i++){
+                    // 라디오 그룹 내에 읽기전용
+                    mRgWeather.getChildAt(i).setEnabled(false);
+                }
+                // 작성완료 버튼을 투명처리한다.
+                iv_check.setVisibility(View.INVISIBLE);
+            }
 
         }
 
@@ -122,16 +146,29 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
                 String title = mEtTitle.getText().toString();       // 제목 입력 값
                 String content = mEtTitle.getText().toString();     // 내용 입력 값
                 String userDate = mSelectedUserDate_start;          // 사용자가 선택한 일시
+                if (userDate.equals("")){
+                    //날짜를 설정 안 한 경우
+                    userDate = mTvDate_start.getText().toString();
+                }
                 String userDate2 = mSelectedUserDate_end;           // 사용자가 선택한 일시
+                if (userDate2.equals("")){
+                    //날짜를 설정 안 한 경우
+                    userDate2 = mTvDate_end.getText().toString();
+                }
                 String writeDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.KOREAN).format(new Date()); //작성 완료 누른 시점의 일시
 
 
-                // 데이터베이스에 저장
-                mDatabaseHelper.setInsertDiaryList(title, content, mSelectiveWeatherType, userDate, userDate2 , writeDate);
-                Toast.makeText(this, "다이어리 등록이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+                // 액티비티의 현재 모드에 따라서 데이터베이스에 저장 또는 업데이트
+                if(mDetailMode.equals("modify")) {
+                    //게시글 수정 모드
+                    mDatabaseHelper.setUpdateDiaryList(title, content, mSelectiveWeatherType, userDate, writeDate, mBeforeDate);
+                    Toast.makeText(this, "다이어리 수정이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+                } else{
+                    mDatabaseHelper.setInsertDiaryList(title, content, mSelectiveWeatherType, userDate,  writeDate);
+                    Toast.makeText(this, "다이어리 등록이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+                }
 
                 finish();       // 현재 액티비티 종료
-
                 break;
 
             case R.id.tv_date:

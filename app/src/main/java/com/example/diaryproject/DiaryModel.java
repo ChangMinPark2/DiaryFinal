@@ -12,6 +12,7 @@ public class DiaryModel implements Serializable {
     String content;         // 게시물 내용
     int weatherType;        // 날씨 값 (0:맑음 1:흐림뒤갬 2:흐림 3:매우흐림 4:비 5:눈)
     String userDate;        // 사용자가 지정한 날짜(일시)
+    String userDate2;
     String writeDate;       // 게시글 작성한 날짜(일시)
 
     // getter & setter 게터세터
@@ -50,6 +51,7 @@ public class DiaryModel implements Serializable {
     public String getUserDate() {
         return userDate;
     }
+
 
     public void setUserDate(String userDate) {
         this.userDate = userDate;
