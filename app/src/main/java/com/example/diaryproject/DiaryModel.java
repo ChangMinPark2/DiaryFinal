@@ -52,10 +52,16 @@ public class DiaryModel implements Serializable {
         return userDate;
     }
 
+    public String getUserDate2() {
+        return userDate2;
+    }
+
 
     public void setUserDate(String userDate) {
         this.userDate = userDate;
     }
+
+    public void setUserDate2(String userDate2) {this.userDate2 = userDate2;}
 
     public String getWriteDate() {
         return writeDate;

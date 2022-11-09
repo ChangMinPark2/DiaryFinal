@@ -81,9 +81,9 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
             int weatherType = diaryModel.getWeatherType();
             ((MaterialRadioButton) mRgWeather.getChildAt(weatherType)).setChecked(true);
             mSelectedUserDate_start = diaryModel.getUserDate();
-            mSelectedUserDate_end = diaryModel.getUserDate();
+            mSelectedUserDate_end = diaryModel.getUserDate2();
             mTvDate_start.setText(diaryModel.getUserDate());
-            mTvDate_end.setText(diaryModel.getUserDate());
+            mTvDate_end.setText(diaryModel.getUserDate2());
 
             if (mDetailMode.equals("modify")){
                 //수정모드
@@ -161,10 +161,10 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
                 // 액티비티의 현재 모드에 따라서 데이터베이스에 저장 또는 업데이트
                 if(mDetailMode.equals("modify")) {
                     //게시글 수정 모드
-                    mDatabaseHelper.setUpdateDiaryList(title, content, mSelectiveWeatherType, userDate, writeDate, mBeforeDate);
+                    mDatabaseHelper.setUpdateDiaryList(title, content, mSelectiveWeatherType, userDate, userDate2, writeDate, mBeforeDate);
                     Toast.makeText(this, "다이어리 수정이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
                 } else{
-                    mDatabaseHelper.setInsertDiaryList(title, content, mSelectiveWeatherType, userDate,  writeDate);
+                    mDatabaseHelper.setInsertDiaryList(title, content, mSelectiveWeatherType, userDate, userDate2, writeDate);
                     Toast.makeText(this, "다이어리 등록이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -219,3 +219,4 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
         }
     }
 }
+

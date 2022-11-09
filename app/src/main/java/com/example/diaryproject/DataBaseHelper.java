@@ -28,6 +28,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "content TEXT NOT NULL, " +
                 "weatherType INTEGER NOT NULL, " +
                 "userDate TEXT NOT NULL, " +
+                "userDate2 TEXT NOT NULL, " +
                 "writeDate TEXT NOT NULL)");
     }
 
@@ -37,9 +38,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     //데이터를 db에 저장 (insert)
-    public void setInsertDiaryList(String _title, String _content, int _weatherType, String _userDate, String _writeDate){
+    public void setInsertDiaryList(String _title, String _content, int _weatherType, String _userDate, String _userDate2, String _writeDate){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO DiaryInfo (title, content, weatherType, userDate, gi writeDate) VALUES('" + _title + "','" + _content + "', '" + _weatherType + "', '" + _userDate + "', '" + _writeDate + "')");
+        db.execSQL("INSERT INTO DiaryInfo (title, content, weatherType, userDate, userDate2, writeDate) VALUES('" + _title + "','" + _content + "', '" + _weatherType + "', '" + _userDate + "','" + _userDate2 + "', '" + _writeDate + "')");
 
     }
 
@@ -57,6 +58,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 String content = cursor.getString(cursor.getColumnIndexOrThrow("content"));
                 int weatherType = cursor.getInt(cursor.getColumnIndexOrThrow("weatherType"));
                 String userDate = cursor.getString(cursor.getColumnIndexOrThrow("userDate"));
+                String userDate2 = cursor.getString(cursor.getColumnIndexOrThrow("userDate2"));
                 String writeDate = cursor.getString(cursor.getColumnIndexOrThrow("writeDate"));
 
                 //create data class
@@ -66,6 +68,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 diaryModel.setContent(content);
                 diaryModel.setWeatherType(weatherType);
                 diaryModel.setUserDate(userDate);
+                diaryModel.setUserDate2(userDate2);
                 diaryModel.setWriteDate(writeDate);
 
                 lstDiary.add(diaryModel);
@@ -77,9 +80,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return lstDiary;
     }
     // 수정 메소드 UPDATE
-    public void setUpdateDiaryList(String _title, String _content, int _weatherType, String _userDate, String _writeDate, String _beforeDate){
+    public void setUpdateDiaryList(String _title, String _content, int _weatherType, String _userDate, String _userDate2, String _writeDate, String _beforeDate){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE DiaryInfo SET title = '" + _title + "' , content = '" + _content + "', weatherType = '" + _weatherType + "', userDate = '" + _userDate + "', writeDate = '" + _writeDate + "' WHERE writeDate = '" + _beforeDate + "' ");
+        db.execSQL("UPDATE DiaryInfo SET title = '" + _title + "' , content = '" + _content + "', weatherType = '" + _weatherType + "', userDate = '" + _userDate + "', userDate2 = '" + _userDate2 + "', writeDate = '" + _writeDate + "' WHERE writeDate = '" + _beforeDate + "' ");
     }
 
     // 기존 데이터 삭제 메소드 - DLELTE

@@ -106,7 +106,7 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
                     // 화면 이동 및 다이어리 데이터 다음 액티비티로 전달
                     Intent diaryDetailIntent = new Intent(mContext, DiaryDetailActivity.class);
                     diaryDetailIntent.putExtra("diaryModel", diaryModel);       // 다이어리 데이터 넘기기
-                    diaryDetailIntent.putExtra("mode", "modify");         // 상세보기 모드 설정
+                    diaryDetailIntent.putExtra("mode", "detail");         // 상세보기 모드 설정
                     mContext.startActivity(diaryDetailIntent);
                 }
             });
@@ -148,7 +148,6 @@ public class DiaryListAdapter extends RecyclerView.Adapter<DiaryListAdapter.View
                                     }
                                 }
                             }).show();
-
                     return false;
                 }
            });
