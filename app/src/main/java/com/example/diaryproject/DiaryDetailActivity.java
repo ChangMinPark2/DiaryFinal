@@ -27,7 +27,7 @@ import java.util.Locale;
 public class DiaryDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mTvDate_start, mTvDate_end;                   // 일시 설정 텍스트
-    private EditText mEtTitle, mEtContent;      // 일기 제목, 일기 내용
+    private EditText mEtTitle, mEtTitle2, mEtContent;// 일기 제목, 일기 내용
     private RadioGroup mRgWeather;
 
     private String mDetailMode = "";                    // intent로 받아낸 게시글 모드
@@ -48,7 +48,8 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
 
         mTvDate_start = findViewById(R.id.tv_date);             // 일시 설정 텍스트
         mTvDate_end = findViewById(R.id.tv_date2);
-        mEtTitle = findViewById(R.id.et_title);                 // 제목 입력필드
+        mEtTitle = findViewById(R.id.et_title);  // 제목 입력필드
+        mEtTitle2 = findViewById(R.id.et_title2);
         mEtContent = findViewById(R.id.et_content);             // 내용 입력필드
         mRgWeather = findViewById(R.id.rg_weather);             // 날씨 선택 라디오 그룹
 
@@ -77,6 +78,7 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
 
             // 넘겨받은 값을 활용해서 필드들을 설정해주기
             mEtTitle.setText(diaryModel.getTitle());
+            mEtTitle2.setText(diaryModel.getTitle2());
             mEtContent.setText(diaryModel.getContent());
             int weatherType = diaryModel.getWeatherType();
             ((MaterialRadioButton) mRgWeather.getChildAt(weatherType)).setChecked(true);
@@ -96,6 +98,7 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
 
                 //읽기 전용 화면으로 표시
                 mEtTitle.setEnabled(false);
+                mEtTitle2.setEnabled(false);
                 mEtContent.setEnabled(false);
                 mTvDate_start.setEnabled(false);
                 mTvDate_end.setEnabled(false);
@@ -144,6 +147,7 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
                 // 이 곳까지 도착했다면 에러상황이 없으므로 데이터 저장!
 
                 String title = mEtTitle.getText().toString();       // 제목 입력 값
+                String title2 = mEtTitle2.getText().toString();
                 String content = mEtTitle.getText().toString();     // 내용 입력 값
                 String userDate = mSelectedUserDate_start;          // 사용자가 선택한 일시
                 if (userDate.equals("")){
@@ -161,10 +165,10 @@ public class DiaryDetailActivity extends AppCompatActivity implements View.OnCli
                 // 액티비티의 현재 모드에 따라서 데이터베이스에 저장 또는 업데이트
                 if(mDetailMode.equals("modify")) {
                     //게시글 수정 모드
-                    mDatabaseHelper.setUpdateDiaryList(title, content, mSelectiveWeatherType, userDate, userDate2, writeDate, mBeforeDate);
+                    mDatabaseHelper.setUpdateDiaryList(title, title2, content, mSelectiveWeatherType, userDate, userDate2, writeDate, mBeforeDate);
                     Toast.makeText(this, "다이어리 수정이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
                 } else{
-                    mDatabaseHelper.setInsertDiaryList(title, content, mSelectiveWeatherType, userDate, userDate2, writeDate);
+                    mDatabaseHelper.setInsertDiaryList(title, title2, content, mSelectiveWeatherType, userDate, userDate2, writeDate);
                     Toast.makeText(this, "다이어리 등록이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
                 }
 

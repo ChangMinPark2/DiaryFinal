@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class DiaryModel implements Serializable {
     int id;                 // 게시물 고유 Id 값
     String title;           // 게시물 제목
+    String title2;   //여행지입력란
     String content;         // 게시물 내용
     int weatherType;        // 날씨 값 (0:맑음 1:흐림뒤갬 2:흐림 3:매우흐림 4:비 5:눈)
     String userDate;        // 사용자가 지정한 날짜(일시)
@@ -28,9 +29,12 @@ public class DiaryModel implements Serializable {
         return title;
     }
 
+    public String getTitle2() { return  title2; }
+
     public void setTitle(String title) {
         this.title = title;
     }
+    public void setTitle2(String title2) {this.title2 = title2;}
 
     public String getContent() {
         return content;

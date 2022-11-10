@@ -25,6 +25,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS DiaryInfo(" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title TEXT NOT NULL, " +
+                "title2 TEXT NOT NULL, " +
                 "content TEXT NOT NULL, " +
                 "weatherType INTEGER NOT NULL, " +
                 "userDate TEXT NOT NULL, " +
@@ -38,9 +39,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     //데이터를 db에 저장 (insert)
-    public void setInsertDiaryList(String _title, String _content, int _weatherType, String _userDate, String _userDate2, String _writeDate){
+    public void setInsertDiaryList(String _title, String _title2, String _content, int _weatherType, String _userDate, String _userDate2, String _writeDate){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO DiaryInfo (title, content, weatherType, userDate, userDate2, writeDate) VALUES('" + _title + "','" + _content + "', '" + _weatherType + "', '" + _userDate + "','" + _userDate2 + "', '" + _writeDate + "')");
+        db.execSQL("INSERT INTO DiaryInfo (title, title2, content, weatherType, userDate, userDate2, writeDate) VALUES('" + _title + "','" + _title2 + "','" + _content + "', '" + _weatherType + "', '" + _userDate + "','" + _userDate2 + "', '" + _writeDate + "')");
 
     }
 
@@ -55,6 +56,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             while(cursor.moveToNext()){
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
+                String title2 = cursor.getString(cursor.getColumnIndexOrThrow("title2"));
                 String content = cursor.getString(cursor.getColumnIndexOrThrow("content"));
                 int weatherType = cursor.getInt(cursor.getColumnIndexOrThrow("weatherType"));
                 String userDate = cursor.getString(cursor.getColumnIndexOrThrow("userDate"));
@@ -65,6 +67,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 DiaryModel diaryModel = new DiaryModel();
                 diaryModel.setId(id);
                 diaryModel.setTitle(title);
+                diaryModel.setTitle2(title2);
                 diaryModel.setContent(content);
                 diaryModel.setWeatherType(weatherType);
                 diaryModel.setUserDate(userDate);
@@ -80,9 +83,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return lstDiary;
     }
     // 수정 메소드 UPDATE
-    public void setUpdateDiaryList(String _title, String _content, int _weatherType, String _userDate, String _userDate2, String _writeDate, String _beforeDate){
+    public void setUpdateDiaryList(String _title, String _title2, String _content, int _weatherType, String _userDate, String _userDate2, String _writeDate, String _beforeDate){
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE DiaryInfo SET title = '" + _title + "' , content = '" + _content + "', weatherType = '" + _weatherType + "', userDate = '" + _userDate + "', userDate2 = '" + _userDate2 + "', writeDate = '" + _writeDate + "' WHERE writeDate = '" + _beforeDate + "' ");
+        db.execSQL("UPDATE DiaryInfo SET title = '" + _title + "' , title2 = '" + _title2 + "' , content = '" + _content + "', weatherType = '" + _weatherType + "', userDate = '" + _userDate + "', userDate2 = '" + _userDate2 + "', writeDate = '" + _writeDate + "' WHERE writeDate = '" + _beforeDate + "' ");
     }
 
     // 기존 데이터 삭제 메소드 - DLELTE
